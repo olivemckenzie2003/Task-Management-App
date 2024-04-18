@@ -56,7 +56,7 @@ const server = http.createServer((req, res) => {
         //If true save the value in "singleData "
         const singleData = JSON.parse(data.toString()).tasks.find(
           //must be same value and sametype
-          (d) => d.TaskID === Number(query)
+          (d) => d.taskID === Number(query)
         );
         //if find single data send it back to the front end
         //send response codde that it is successful back to the front end
@@ -130,6 +130,57 @@ const server = http.createServer((req, res) => {
         }
       });
     });
+  } else if (req.method === "DELETE" && req.url === "/delete") {
+    //Getting the data that is comig from the form which is the ID
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
+
+    //end of call request
+    req.on("end", () => {
+      //convert info from user to json format
+      const taskDelete = JSON.parse(body);
+      console.log(taskDelete);
+      //Read the file data.json
+      fs.readFile(DATA_FILE_PATH, (err, data) => {
+        //Error handling if cannot access data
+        if (err) {
+          console.error("Error reading data file:", err);
+          res.writeHead(500, { "Content-Type": "text/plain" });
+          res.end("Internal Server Error");
+        } else {
+          //getting the task from the json file
+          const tasks = JSON.parse(data).tasks;
+          console.log(tasks);
+          //Updating the task and loop through the array
+          //only return the task that has the ID
+          const updatedTasks = tasks.filter(
+            (task) => task.taskID !== Number(taskDelete.taskID)
+          );
+          console.log("updated tasks", updatedTasks);
+          //Write the updated files without file deleted back to file.
+          fs.writeFile(
+            DATA_FILE_PATH,
+            JSON.stringify({ tasks: updatedTasks }),
+            //Handle error when writing to the file
+            (err) => {
+              if (err) {
+                console.error("Error deleting task:", err);
+                res.writeHead(500, { "Content-Type": "text/plain" });
+                res.end("Internal Server Error");
+              } else {
+                console.log("Task deleted successfully.");
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(
+                  JSON.stringify({ message: "Task deleted successfully." })
+                );
+              }
+            }
+          );
+        }
+      });
+    });
   } else {
     fs.readFile(path.join(__dirname, "index.html"), (err, data) => {
       if (err) {
@@ -149,24 +200,58 @@ server.listen(PORT, () => {
 
 /*
 
+const fs = require("fs");
+
+const remove = (req, res) => {
+  const fileName = req.params.name;
+  const directoryPath = __basedir + "/resources/static/assets/uploads/";
+
+  fs.unlink(directoryPath + fileName, (err) => {
+    if (err) {
+      res.status(500).send({
+        message: "Could not delete the file. " + err,
+      });
+    }
+
+    res.status(200).send({
+      message: "File is deleted.",
+    });
+  });
+};
+
+const removeSync = (req, res) => {
+  const fileName = req.params.name;
+  const directoryPath = __basedir + "/resources/static/assets/uploads/";
+
+  try {
+    fs.unlinkSync(directoryPath + fileName);
+
+    res.status(200).send({
+      message: "File is deleted.",
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: "Could not delete the file. " + err,
+    });
+  }
+};
+
+module.exports = {
+  remove,
+  removeSync,
+};
+
+
+
 const fs = require('fs');
-const pathToFile = 'path/to/your/json/file.json'; // Replace with your actual file path
 
-// Read the JSON data from the file
-let data = require(pathToFile);
+try {
+  fs.unlinkSync('file.txt');
 
-// Specify the key you want to delete
-const deleteKey = 'nickname';
-
-// Delete the key from the data object
-delete data[deleteKey];
-
-// Write the updated data back to the file
-fs.writeFileSync(pathToFile, JSON.stringify(data, null, 4), 'utf8');
-
-// Respond with a success message
-console.log(`${deleteKey} was deleted`);
-
+  console.log("Delete File successfully.");
+} catch (error) {
+  console.log(error);
+}
 
 
 */

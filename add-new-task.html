@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="form-container">
+      <form class=" " id="myForm">
+        <h1>Task Management App</h1>
+        <br /><br />
+        <h3>Enter Task Details</h3>
+        <!-- Text input field -->
+        <!--date task created-->
+        <div>
+          <div class="formbox">
+            <label for="date">Enter date:</label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              placeholder="Enter date DD/MM/YYYY"
+              required
+            /><br /><br />
+          </div>
+        </div>
+
+        <div>
+          <label for="deadline">Enter deadline date:</label>
+          <input
+            type="date"
+            id="deadline"
+            name="deadline"
+            placeholder="Enter deadline DD/MM/YYYY"
+            required
+          />
+          <br /><br />
+        </div>
+        <div>
+          <label for="taskTitle">Enter Task Title:</label>
+          <textarea
+            id="taskTitle"
+            name="taskTitle"
+            rows="2"
+            cols="100"
+            placeholder="Enter Task Title"
+          ></textarea>
+          <br /><br />
+        </div>
+
+        <div>
+          <label for="taskDetails">Enter Task Information:</label>
+          <textarea
+            id="taskDetails"
+            name="taskDetails"
+            rows="10"
+            cols="100"
+            placeholder="Enter Task.."
+          ></textarea>
+          <br /><br />
+        </div>
+
+        <div>
+          <!-- Drop-down menu -->
+          <label for="priority">Select Task priority:</label>
+          <select id="priority" name="priority">
+            <option value="High priority">High priority</option>
+            <option value="Medium priority">Medium priority</option>
+            <option value="Low priority">Low priority</option>
+          </select>
+          <br /><br />
+        </div>
+
+        <div>
+          <label for="taskStatus">Select Task Status:</label>
+          <select id="taskStatus" name="taskStatus">
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <br /><br />
+
+          <!-- Submit button -->
+          <input type="submit" value="Submit" />
+          <br /><br /><br />
+        </div>
+      </form>
+    </div>
+
+    <script>
+      //Get the data input by the user
+      const myForm = document.querySelector("#myForm");
+      myForm.addEventListener("submit", (ev) => {
+        ev.preventDefault();
+        let task = {
+          taskID: date.now(),
+          date: document.getElementById("date").value,
+          deadline: document.getElementById("deadline").value,
+          taskTitle: document.getElementById("taskTitle").value,
+          taskDetails: document.getElementById("taskDetails").value,
+          priority: document.getElementById("priority").value,
+          taskStatus: document.getElementById("taskStatus").value,
+        };
+        fetch("/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(task),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Task added:", data);
+
+            myForm.reset();
+          })
+          .catch((error) => {
+            console.error(
+              "There was a problem with your fetch operation:",
+              error
+            );
+          });
+        myForm.reset();
+      });
+    </script>
+  </body>
+</html>

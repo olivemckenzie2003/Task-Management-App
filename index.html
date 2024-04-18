@@ -51,100 +51,24 @@
     </style>
   </head>
   <body>
-    <div class="form-container">
-      <form class=" " id="myForm">
-        <h1>Task Management App</h1>
-        <br /><br />
-        <h3>Enter Task Details</h3>
-        <!-- Text input field -->
-        <!--Date task created-->
-        <div>
-          <div class="formbox">
-            <label for="Date">Enter Date:</label>
-            <input
-              type="date"
-              id="Date"
-              name="date"
-              placeholder="Enter Date DD/MM/YYYY"
-              required
-            /><br /><br />
-          </div>
-        </div>
+    <!-- retrieve-->
 
-        <div>
-          <label for="DeadLine">Enter Deadline Date:</label>
-          <input
-            type="date"
-            id="DeadLine"
-            name="deadLine"
-            placeholder="Enter Deadline DD/MM/YYYY"
-            required
-          />
-          <br /><br />
-        </div>
-        <div>
-          <label for="TaskTitle">Enter Task Title:</label>
-          <textarea
-            id="TaskTitle"
-            name="TaskTitle"
-            rows="2"
-            cols="100"
-            placeholder="Enter Task Title"
-          ></textarea>
-          <br /><br />
-        </div>
-
-        <div>
-          <label for="TaskDetails">Enter Task Information:</label>
-          <textarea
-            id="TaskDetails"
-            name="TaskDetails"
-            rows="10"
-            cols="100"
-            placeholder="Enter Task.."
-          ></textarea>
-          <br /><br />
-        </div>
-
-        <div>
-          <!-- Drop-down menu -->
-          <label for="Priority">Select Task Priority:</label>
-          <select id="Priority" name="Priority">
-            <option value="High Priority">High Priority</option>
-            <option value="Medium Priority">Medium Priority</option>
-            <option value="Low Priority">Low Priority</option>
-          </select>
-          <br /><br />
-        </div>
-
-        <div>
-          <label for="TaskStatus">Select Task Status:</label>
-          <select id="TaskStatus" name="TaskStatus">
-            <option value="Not Started">Not Started</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-          </select>
-          <br /><br />
-
-          <!-- Submit button -->
-          <input type="submit" value="Submit" />
-          <br /><br /><br />
-        </div>
-      </form>
+    <div id="all-tasks">
+      <h1>ALL TASKS</h1>
     </div>
 
     <!-- retrieve-->
 
     <br /><br />
-    <div class="form-containerTwo">
+    <div class="form-containerTwo" id="formContainerTwo">
       <form id="myFormTwo">
         <h3>Retreive Task by ID</h3>
 
         <div>
           <input
             type="text"
-            id="TaskID"
-            name="TaskID"
+            id="taskID"
+            name="taskID"
             placeholder="Enter Task ID."
             required
           /><br /><br />
@@ -166,8 +90,8 @@
         <div>
           <input
             type="text"
-            id="TaskID"
-            name="TaskID"
+            id="taskID"
+            name="taskID"
             placeholder="Enter Task ID."
             required
           /><br /><br />
@@ -175,36 +99,36 @@
           <br /><br /><br />
         </div>
         <!-- Text input field -->
-        <!--Date task created-->
+        <!--date task created-->
         <div>
           <div class="formbox">
-            <label for="Date">Enter Date:</label>
+            <label for="date">Enter date:</label>
             <input
               type="date"
-              id="Date"
+              id="date"
               name="date"
-              placeholder="Enter Date DD/MM/YYYY"
+              placeholder="Enter date DD/MM/YYYY"
               required
             /><br /><br />
           </div>
         </div>
 
         <div>
-          <label for="DeadLine">Enter Deadline Date:</label>
+          <label for="deadline">Enter deadline date:</label>
           <input
             type="date"
-            id="DeadLine"
-            name="deadLine"
-            placeholder="Enter Deadline DD/MM/YYYY"
+            id="deadline"
+            name="deadline"
+            placeholder="Enter deadline DD/MM/YYYY"
             required
           />
           <br /><br />
         </div>
         <div>
-          <label for="TaskTitle">Enter Task Title:</label>
+          <label for="taskTitle">Enter Task Title:</label>
           <textarea
-            id="TaskTitle"
-            name="TaskTitle"
+            id="taskTitle"
+            name="taskTitle"
             rows="2"
             cols="100"
             placeholder="Enter Task Title"
@@ -213,10 +137,10 @@
         </div>
 
         <div>
-          <label for="TaskDetails">Enter Task Information:</label>
+          <label for="taskDetails">Enter Task Information:</label>
           <textarea
-            id="TaskDetails"
-            name="TaskDetails"
+            id="taskDetails"
+            name="taskDetails"
             rows="10"
             cols="100"
             placeholder="Enter Task.."
@@ -226,18 +150,18 @@
 
         <div>
           <!-- Drop-down menu -->
-          <label for="Priority">Select Task Priority:</label>
-          <select id="Priority" name="Priority">
-            <option value="High Priority">High Priority</option>
-            <option value="Medium Priority">Medium Priority</option>
-            <option value="Low Priority">Low Priority</option>
+          <label for="priority">Select Task priority:</label>
+          <select id="priority" name="priority">
+            <option value="High priority">High priority</option>
+            <option value="Medium priority">Medium priority</option>
+            <option value="Low priority">Low priority</option>
           </select>
           <br /><br />
         </div>
 
         <div>
-          <label for="TaskStatus">Select Task Status:</label>
-          <select id="TaskStatus" name="TaskStatus">
+          <label for="taskStatus">Select Task Status:</label>
+          <select id="taskStatus" name="taskStatus">
             <option value="Not Started">Not Started</option>
             <option value="In Progress">In Progress</option>
             <option value="Completed">Completed</option>
@@ -245,7 +169,7 @@
           <br /><br />
 
           <!-- Submit button -->
-          <input type="submit" value="Submit" id="run-python-btn" />
+          <input type="submit" value="Submit" />
           <br /><br /><br />
         </div>
       </form>
@@ -260,8 +184,8 @@
         <div>
           <input
             type="text"
-            id="TaskID"
-            name="TaskID"
+            id="taskID_Delete"
+            name="taskID_Delete"
             placeholder="Enter Task ID."
             required
           /><br /><br />
@@ -275,60 +199,62 @@
     <br /><br /><br />
 
     <script>
-      //Get the data input by the user
-      const myForm = document.querySelector("#myForm");
-      myForm.addEventListener("submit", (ev) => {
-        ev.preventDefault();
-        let task = {
-          TaskID: Date.now(),
-          Date: document.getElementById("Date").value,
-          DeadLine: document.getElementById("DeadLine").value,
-          TaskTitle: document.getElementById("TaskTitle").value,
-          TaskDetails: document.getElementById("TaskDetails").value,
-          Priority: document.getElementById("Priority").value,
-          TaskStatus: document.getElementById("TaskStatus").value,
-        };
-        fetch("/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(task),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
+      const allTasks = document.querySelector("#all-tasks");
+      async function fetchAllTasks() {
+        try {
+          //fetch all tasks from the back end data.json
+          const { tasks } = await fetch("/tasks")
+            .then((res) => res.json())
+            .then((res) => res);
+
+          if (tasks) {
+            console.log(tasks);
+            for (let i = 0; i < tasks.length; i++) {
+              // Create a new div element
+              const taskDiv = document.createElement("div");
+              // Use innerHTML to set the content of the div
+              taskDiv.innerHTML = `
+            <h4>Title: ${tasks[i].taskTitle}</h4>
+            <p>Task Details: ${tasks[i].taskDetails}</p>
+            <p>Status: ${tasks[i].taskStatus}</p>
+            <p>Priority: ${tasks[i].priority}</p>
+            <p>Deadline: ${tasks[i].deadline}</p>
+            <p><span>Edit Task</span></p>
+        `;
+              // Append the newly created div to allTasks
+              allTasks.appendChild(taskDiv);
             }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("Task added:", data);
-            myForm.reset();
-          })
-          .catch((error) => {
-            console.error(
-              "There was a problem with your fetch operation:",
-              error
-            );
-          });
-        myForm.reset();
-      });
+          }
+        } catch (error) {
+          console.error("Error fetching all tasks:", error);
+        }
+      }
+      fetchAllTasks();
 
       //Get task by Task ID
       const theMyFormTwo = document.querySelector("#myFormTwo");
       theMyFormTwo.addEventListener("submit", (ev) => {
         ev.preventDefault();
-        let taskTwo = document.getElementById("TaskID");
+        let taskTwo = document.getElementById("taskID");
         //console.log();
         //search file for ID and return file
-        async function fetchTaskById(TaskID) {
+        async function fetchTaskById(taskID) {
           try {
             //call task Id from the back end to give particular data with this ID
-            const task = await fetch(`/tasks?id=${TaskID}`)
+            const task = await fetch(`/tasks?id=${taskID}`)
               .then((res) => res.json())
               .then((res) => res);
             if (task) {
               console.log(task);
+              const taskDiv = document.createElement("div");
+
+              const title = document.createElement("h2");
+              title.textContent = task.taskTitle;
+              taskDiv.appendChild(title);
+              //Append complete task document to form and show on screen
+              myFormTwo.appendChild(taskDiv);
+
+              formContainerTwo.appendChild(taskDiv);
             }
           } catch (error) {
             console.error("Error fetching task by ID:", error);
@@ -338,121 +264,65 @@
       });
 
       //Update
-      //Get task by TaskID and display task details in message box
+      //Get task by taskID and display task details in message box
       //Update task information and save back to file.
       const theMyFormThree = document.querySelector("#myFormThree");
       theMyFormThree.addEventListener("submit", (ev) => {
         ev.preventDefault();
-        let taskThree = document.getElementById("TaskID");
-        console.log(TaskID);
+        let taskThree = document.getElementById("taskID");
+        //console.log();
         //search file for ID and return file
-        async function fetchTaskById(TaskID) {
+        async function fetchTaskById(taskID) {
           try {
             //call task Id from the back end to give particular data with this ID
-            const theTaskThree = await fetch(`/tasks?id=${TaskID}`)
+            const theTaskThree = await fetch(`/tasks?id=${taskID}`)
               .then((res) => res.json())
               .then((res) => res);
             if (theTaskThree) {
+              console.log(theTaskThree);
             }
           } catch (error) {
             console.error("Error fetching task by ID:", error);
           }
         }
         fetchTaskById(taskThree.value);
-        console.log(taskThree.value);
       });
 
       //Delete
-      //Get task by TaskID and delete task details from file
+      //Get task by taskID and delete task details from file
       //Update task information and save back to file.
       const theMyFormFour = document.querySelector("#myFormFour");
       theMyFormFour.addEventListener("submit", (ev) => {
         ev.preventDefault();
-        let taskFour = document.getElementById("TaskID");
-        //console.log();
+        let taskFour = document.getElementById("taskID_Delete").value;
+        console.log(taskFour);
         //search file for ID and return file
-        async function fetchTaskById(TaskID) {
-          try {
-            //call task Id from the back end to give particular data with this ID
-            const theTaskFour = await delete `/tasks?id=${TaskID}`
-              .then((res) => res.json())
-              .then((res) => res);
-            if (theTaskFour) {
-              console.log(theTaskFour);
-            }
-          } catch (error) {
-            console.error("Error fetching task by ID:", error);
-          }
-        }
-        fetchTaskById(taskFour.value);
+        fetch("/delete", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ taskID: taskFour }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("Task deleted:", data);
+          })
+          .catch((error) => {
+            console.error(
+              "There was a problem with the delete operation:",
+              error
+            );
+          });
       });
 
       /*
-       
-
-        const tasks = require("./data");
-        const http = require("http");
-
-        const fs = require("fs");
-        const pathToFile = "D:\NIYO\FinalProject\data.json"; // Replace with your actual file path
-
-        // Read the JSON data from the file
-        let data = require(pathToFile);
-
-        // Specify the key you want to delete
-        const deleteKey = TaskID;
-
-        // Delete the key from the data object
-        delete data[deleteKey];
-
-        // Write the updated data back to the file
-        fs.writeFileSync(pathToFile, JSON.stringify(data, null, 4), "utf8");
-
-        // Respond with a success message
-        console.log(`${deleteKey} was deleted`);
-
-        */
-
-      /*
-
-
-      const fs = require('fs');
-      const pathToFile = 'path/to/your/json/file.json'; // Replace with your actual file path
-
-      // Read the JSON data from the file
-      let data = require(pathToFile);
-
-      // Specify the key you want to delete
-      const deleteKey = 'nickname';
-
-      // Delete the key from the data object
-      delete data[deleteKey];
-
-      // Write the updated data back to the file
-      fs.writeFileSync(pathToFile, JSON.stringify(data, null, 4), 'utf8');
-
-      // Respond with a success message
-      console.log(`${deleteKey} was deleted`);
-
-
-
-            const taskToRemove = taskFour;
-
-                  // Find the index of the entry with the task
-                  const indexToRemove = theTaskFour.findIndex(
-                    (entry) => entry.TaskID === taskToRemove
-                  );
-
-                  if (indexToRemove !== -1) {
-                    // Remove the entry at the found index
-                    theTaskFour.splice(indexToRemove, 1);
-
 
             const formContainerTwo = document.querySelector("#form-containerTwo");
             const myFormTwo = document.querySelector("#myFormTwo");
             myFormTwo.addEventListener("submit", (ev) => {
               ev.preventDefault();
-              let taskTwo = document.getElementById("TaskID");
+              let taskTwo = document.getElementById("taskID");
 
               //search file for ID and return file
               async function fetchTaskById(id) {
@@ -466,34 +336,36 @@
 
                     //Append task date to document
                     const taskDiv = document.createElement("div");
+
+
                     const title = document.createElement("h2");
-                    title.textContent = task.TaskTitle;
+                    title.textContent = task.taskTitle;
                     taskDiv.appendChild(title);
 
                     //Append task date to document
-                    const introDate = document.createElement("h2");
-                    introDate.textContent = task.Date;
-                    taskDiv.appendChild(introDate);
+                    const introdate = document.createElement("h2");
+                    introdate.textContent = task.date;
+                    taskDiv.appendChild(introdate);
 
                     //Append task deadline date to document
-                    const deadDate = document.createElement("h2");
-                    deadDate.textContent = task.DeadLine;
-                    taskDiv.appendChild(deadDate);
+                    const deaddate = document.createElement("h2");
+                    deaddate.textContent = task.deadline;
+                    taskDiv.appendChild(deaddate);
 
                     //Append task details date to document
-                    const theTaskDetails = document.createElement("h2");
-                    theTaskDetails.textContent = task.TaskDetails;
-                    taskDiv.appendChild(theTaskDetails);
+                    const thetaskDetails = document.createElement("h2");
+                    thetaskDetails.textContent = task.taskDetails;
+                    taskDiv.appendChild(thetaskDetails);
 
                     //Append task priority level to document
-                    const thePriority = document.createElement("h2");
-                    thePriority.textContent = task.Priority;
-                    taskDiv.appendChild(thePriority);
+                    const thepriority = document.createElement("h2");
+                    thepriority.textContent = task.priority;
+                    taskDiv.appendChild(thepriority);
 
                     //Append task status to document
-                    const theTaskStatus = document.createElement("h2");
-                    theTaskStatus.textContent = task.TaskStatus;
-                    taskDiv.appendChild(theTaskStatus);
+                    const thetaskStatus = document.createElement("h2");
+                    thetaskStatus.textContent = task.taskStatus;
+                    taskDiv.appendChild(thetaskStatus);
 
 
                     //Append complete task document to form and show on screen
@@ -509,3 +381,4 @@
     </script>
   </body>
 </html>
+Shared in
