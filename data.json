@@ -1,0 +1,85 @@
+{
+  "tasks": [
+    {
+      "taskID": 1713101365351,
+      "date": "2024-04-14",
+      "deadline": "2024-07-26",
+      "taskTitle": "Weeding Garden",
+      "taskDetails": "Weed herb garden bed, cut the lawn, jet clean driveway",
+      "priority": "Medium priority",
+      "taskStatus": "Not Started"
+    },
+    {
+      "taskID": 1713172520843,
+      "date": "2024-04-15",
+      "deadline": "2024-04-30",
+      "taskTitle": "Bookshelf Project",
+      "taskDetails": "Learn basics of react and complete project",
+      "priority": "High priority",
+      "taskStatus": "In Progress"
+    },
+    {
+      "taskID": 1713232248439,
+      "date": "2024-04-16",
+      "deadline": "2024-04-29",
+      "taskTitle": "Presentation for final project",
+      "taskDetails": "Complete slides for final project",
+      "priority": "Medium priority",
+      "taskStatus": "In Progress"
+    },
+    {
+      "taskID": 1713239086635,
+      "date": "2024-04-16",
+      "deadline": "2024-04-30",
+      "taskTitle": "Job search",
+      "taskDetails": "Complete tests and prepare for interview",
+      "priority": "Low priority",
+      "taskStatus": "Not Started"
+    },
+    {
+      "taskID": 1713357851318,
+      "date": "2024-04-17",
+      "deadline": "2024-05-26",
+      "taskTitle": "Write Test Script",
+      "taskDetails": "Work out you are going to test\n\nThe write test script",
+      "priority": "High priority",
+      "taskStatus": "In Progress"
+    },
+    {
+      "taskID": 1713358422274,
+      "date": "2024-04-17",
+      "deadline": "2024-05-30",
+      "taskTitle": "Write Test Scripts",
+      "taskDetails": "Look what has be be tested and write the test scripts",
+      "priority": "High priority",
+      "taskStatus": "In Progress"
+    },
+    {
+      "taskID": 1713358561481,
+      "date": "2024-04-17",
+      "deadline": "2024-04-28",
+      "taskTitle": "Write Test Scripts ",
+      "taskDetails": "Decide what has to be tested and write test scripts",
+      "priority": "High priority",
+      "taskStatus": "Completed"
+    },
+    {
+      "taskID": 1713375711794,
+      "date": "2024-04-17",
+      "deadline": "2024-05-26",
+      "taskTitle": "Book Train Tickets",
+      "taskDetails": "Find train times and prices",
+      "priority": "Medium priority",
+      "taskStatus": "Not Started"
+    },
+    {
+      "taskID": 1713442245800,
+      "date": "2024-04-18",
+      "deadline": "2024-09-18",
+      "taskTitle": "Improve Knowledge of node.js",
+      "taskDetails": "Watch on line videos\nGet a book on Node.js\nPractice coding with projects",
+      "priority": "Low priority",
+      "taskStatus": "In Progress"
+    }
+  ]
+}
