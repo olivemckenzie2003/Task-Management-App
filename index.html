@@ -1,84 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Form Example</title>
-    <style>
-      /* Style for the form container */
-      .form-container {
-        max-width: 400px;
-        margin: 0 auto;
-      }
-
-      /* Style for the form container */
-      .form-containerTwo {
-        max-width: 400px;
-        margin: 0 auto;
-      }
-
-      /* Style for the form container */
-      .form-containerThree {
-        max-width: 400px;
-        margin: 0 auto;
-      }
-
-      /* Style for the form container */
-      .form-containerFour {
-        max-width: 400px;
-        margin: 0 auto;
-      }
-
-      /* Style for the input fields */
-      input[type="text"],
-      select {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-
-      /* Style for the submit button */
-      input[type="submit"] {
-        background-color: #4caf50;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-    </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Task Manager App</title>
   </head>
+
   <body>
-    <!-- retrieve-->
+    <h1>Task Management App</h1>
+    <br />
+    <br />
+    <a href="addNewTask.html" target="_self"><h2>Add A New Task</h2></a>
 
-    <div id="all-tasks">
-      <h1>ALL TASKS</h1>
-    </div>
+    <form>
+      <div>
+        <h2>Find Task By Title</h2>
+        <input
+          type="text"
+          id="searchTask"
+          name="searchTask"
+          placeholder="Enter Task Title."
+          required
+        />
+      </div>
+    </form>
 
-    <!-- retrieve-->
-
-    <br /><br />
-    <div class="form-containerTwo" id="formContainerTwo">
-      <form id="myFormTwo">
-        <h3>Retreive Task by ID</h3>
-
-        <div>
-          <input
-            type="text"
-            id="taskID"
-            name="taskID"
-            placeholder="Enter Task ID."
-            required
-          /><br /><br />
-          <input type="submit" value="Submit" id="retrieve" />
-          <br /><br /><br />
-        </div>
-      </form>
+    <!-- Display all Tasks-->
+    <!--All information in the div will have an ID of "all-tasks"-->
+    <br /><br /><br />
+    <div>
+      <h2>ALL TASKS</h2>
+      <div id="all-tasks"></div>
     </div>
 
     <br /><br /><br />
+
+    <!-- Search for task by Title-->
     <br /><br /><br />
 
     <!-- Update-->
@@ -86,18 +44,8 @@
       <form class=" " id="myFormThree">
         <br /><br />
         <h3>Update Task</h3>
-
-        <div>
-          <input
-            type="text"
-            id="taskID"
-            name="taskID"
-            placeholder="Enter Task ID."
-            required
-          /><br /><br />
-          <input type="submit" value="Submit" id="retrieve" />
-          <br /><br /><br />
-        </div>
+        <!-- Hidden input for storing task ID -->
+        <input type="hidden" id="taskID" name="taskID" required />
         <!-- Text input field -->
         <!--date task created-->
         <div>
@@ -109,6 +57,8 @@
               name="date"
               placeholder="Enter date DD/MM/YYYY"
               required
+              disabled
+              onfocus="disablePastDates()"
             /><br /><br />
           </div>
         </div>
@@ -119,11 +69,14 @@
             type="date"
             id="deadline"
             name="deadline"
-            placeholder="Enter deadline DD/MM/YYYY"
+            placeholder="Enter
+          deadline DD/MM/YYYY"
             required
+            onfocus="disablePastDates()"
           />
-          <br /><br />
         </div>
+        <br /><br />
+
         <div>
           <label for="taskTitle">Enter Task Title:</label>
           <textarea
@@ -175,30 +128,11 @@
       </form>
     </div>
 
-    <!-- Delete-->
-    <br /><br />
-    <div class="form-containerFour">
-      <form id="myFormFour">
-        <h3>Delete Task by ID</h3>
-
-        <div>
-          <input
-            type="text"
-            id="taskID_Delete"
-            name="taskID_Delete"
-            placeholder="Enter Task ID."
-            required
-          /><br /><br />
-          <input type="submit" value="Submit" id="delete" />
-          <br /><br /><br />
-        </div>
-      </form>
-    </div>
-
     <br /><br /><br />
     <br /><br /><br />
 
     <script>
+      //Put the task information in the form for editing
       const allTasks = document.querySelector("#all-tasks");
       async function fetchAllTasks() {
         try {
@@ -212,14 +146,18 @@
             for (let i = 0; i < tasks.length; i++) {
               // Create a new div element
               const taskDiv = document.createElement("div");
+              taskDiv.setAttribute("data-task-id", `${tasks[i].taskID}`);
               // Use innerHTML to set the content of the div
               taskDiv.innerHTML = `
             <h4>Title: ${tasks[i].taskTitle}</h4>
             <p>Task Details: ${tasks[i].taskDetails}</p>
             <p>Status: ${tasks[i].taskStatus}</p>
             <p>Priority: ${tasks[i].priority}</p>
+            <p>StartDate: ${tasks[i].date}</p>
             <p>Deadline: ${tasks[i].deadline}</p>
-            <p><span>Edit Task</span></p>
+            <button onclick="editTask(this.parentNode)"> Edit Task</button>
+
+            <button onclick="deleteTask(this.parentNode)">Delete Task</button>
         `;
               // Append the newly created div to allTasks
               allTasks.appendChild(taskDiv);
@@ -231,37 +169,64 @@
       }
       fetchAllTasks();
 
-      //Get task by Task ID
-      const theMyFormTwo = document.querySelector("#myFormTwo");
-      theMyFormTwo.addEventListener("submit", (ev) => {
-        ev.preventDefault();
-        let taskTwo = document.getElementById("taskID");
-        //console.log();
-        //search file for ID and return file
-        async function fetchTaskById(taskID) {
-          try {
-            //call task Id from the back end to give particular data with this ID
-            const task = await fetch(`/tasks?id=${taskID}`)
-              .then((res) => res.json())
-              .then((res) => res);
-            if (task) {
-              console.log(task);
-              const taskDiv = document.createElement("div");
-
-              const title = document.createElement("h2");
-              title.textContent = task.taskTitle;
-              taskDiv.appendChild(title);
-              //Append complete task document to form and show on screen
-              myFormTwo.appendChild(taskDiv);
-
-              formContainerTwo.appendChild(taskDiv);
+      document
+        .querySelector("#searchTask")
+        .addEventListener("input", function () {
+          const searchValue = this.value.toLowerCase();
+          const taskDivs = document.querySelectorAll("#all-tasks > div");
+          console.log(taskDivs);
+          taskDivs.forEach((div) => {
+            const title = div.querySelector("h4").textContent.toLowerCase();
+            console.log(title);
+            //search for the value
+            if (title.includes(searchValue)) {
+              div.style.display = "";
+            } else {
+              //search value does not show
+              div.style.display = "none";
             }
-          } catch (error) {
-            console.error("Error fetching task by ID:", error);
-          }
-        }
-        fetchTaskById(taskTwo.value);
-      });
+          });
+        });
+
+      //Function that shows task in HTML edit task interface
+      //and allows task to be edited and savedback to file
+      function editTask(taskDiv) {
+        //Call this.parent node which is the parent div
+        //It is expecting a div, extract task items
+        const taskTitle = taskDiv
+          .querySelector("h4")
+          //remove the task items only need thevalue presented on the form
+          .textContent.replace("Title: ", "");
+        const taskDetails = taskDiv
+          .querySelectorAll("p")[0]
+          .textContent.replace("Task Details: ", "");
+
+        const taskStatus = taskDiv
+          .querySelectorAll("p")[1]
+          .textContent.replace("Status: ", "");
+        const priority = taskDiv
+          .querySelectorAll("p")[2]
+          .textContent.replace("Priority: ", "");
+        const date = taskDiv
+          .querySelectorAll("p")[3]
+          .textContent.replace("StartDate: ", "");
+        const deadline = taskDiv
+          .querySelectorAll("p")[4]
+          .textContent.replace("Deadline: ", "");
+
+        const taskID = taskDiv.getAttribute("data-task-id");
+        console.log(taskID);
+        //Accessing update form and enter it into the form for editing
+        document.getElementById("taskID").value = taskID;
+        document.getElementById("date").value = date;
+        document.getElementById("taskTitle").value = taskTitle;
+        document.getElementById("taskDetails").value = taskDetails;
+        document.getElementById("taskStatus").value = taskStatus;
+        document.getElementById("priority").value = priority;
+        document.getElementById("deadline").value = deadline;
+        //Take you to populated form for editing
+        document.getElementById("myFormThree").scrollIntoView();
+      }
 
       //Update
       //Get task by taskID and display task details in message box
@@ -269,44 +234,66 @@
       const theMyFormThree = document.querySelector("#myFormThree");
       theMyFormThree.addEventListener("submit", (ev) => {
         ev.preventDefault();
-        let taskThree = document.getElementById("taskID");
-        //console.log();
-        //search file for ID and return file
-        async function fetchTaskById(taskID) {
-          try {
-            //call task Id from the back end to give particular data with this ID
-            const theTaskThree = await fetch(`/tasks?id=${taskID}`)
-              .then((res) => res.json())
-              .then((res) => res);
-            if (theTaskThree) {
-              console.log(theTaskThree);
+
+        let updatedTask = {
+          taskID: Number(document.getElementById("taskID").value),
+          date: document.getElementById("date").value,
+          deadline: document.getElementById("deadline").value,
+          taskTitle: document.getElementById("taskTitle").value,
+          taskDetails: document.getElementById("taskDetails").value,
+          priority: document.getElementById("priority").value,
+          taskStatus: document.getElementById("taskStatus").value,
+        };
+        fetch("/update", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedTask),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
             }
-          } catch (error) {
-            console.error("Error fetching task by ID:", error);
-          }
-        }
-        fetchTaskById(taskThree.value);
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Task updated successfully:", data);
+            alert("Task updated successfully");
+            myFormThree.reset();
+          })
+          .catch((error) => {
+            console.error(
+              "There was a problem with your fetch operation:",
+              error
+            );
+          });
       });
 
       //Delete
       //Get task by taskID and delete task details from file
       //Update task information and save back to file.
-      const theMyFormFour = document.querySelector("#myFormFour");
-      theMyFormFour.addEventListener("submit", (ev) => {
-        ev.preventDefault();
-        let taskFour = document.getElementById("taskID_Delete").value;
-        console.log(taskFour);
+
+      function deleteTask(taskDiv) {
+        const taskID = taskDiv.getAttribute("data-task-id");
+        console.log(taskDiv);
+        console.log(typeof taskID);
         //search file for ID and return file
         fetch("/delete", {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ taskID: taskFour }),
+          body: JSON.stringify({ taskID: taskID }),
         })
           .then((res) => res.json())
           .then((data) => {
             console.log("Task deleted:", data);
+            if (data.success) {
+              taskDiv.remove();
+            } else {
+              alert("fail to delete please try again");
+            }
           })
           .catch((error) => {
             console.error(
@@ -314,71 +301,20 @@
               error
             );
           });
-      });
+      }
 
-      /*
+      function disablePastDates() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, "0");
+        var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+        var yyyy = today.getFullYear();
 
-            const formContainerTwo = document.querySelector("#form-containerTwo");
-            const myFormTwo = document.querySelector("#myFormTwo");
-            myFormTwo.addEventListener("submit", (ev) => {
-              ev.preventDefault();
-              let taskTwo = document.getElementById("taskID");
+        today = yyyy + "-" + mm + "-" + dd;
+        document.getElementById("deadline").setAttribute("min", today);
+      }
 
-              //search file for ID and return file
-              async function fetchTaskById(id) {
-                try {
-                  const task = await fetch(`/tasks?id=${id}`)
-                    .then((res) => res.json())
-                    .then((res) => res);
-                  if (task) {
-                    console.log(task);
-
-
-                    //Append task date to document
-                    const taskDiv = document.createElement("div");
-
-
-                    const title = document.createElement("h2");
-                    title.textContent = task.taskTitle;
-                    taskDiv.appendChild(title);
-
-                    //Append task date to document
-                    const introdate = document.createElement("h2");
-                    introdate.textContent = task.date;
-                    taskDiv.appendChild(introdate);
-
-                    //Append task deadline date to document
-                    const deaddate = document.createElement("h2");
-                    deaddate.textContent = task.deadline;
-                    taskDiv.appendChild(deaddate);
-
-                    //Append task details date to document
-                    const thetaskDetails = document.createElement("h2");
-                    thetaskDetails.textContent = task.taskDetails;
-                    taskDiv.appendChild(thetaskDetails);
-
-                    //Append task priority level to document
-                    const thepriority = document.createElement("h2");
-                    thepriority.textContent = task.priority;
-                    taskDiv.appendChild(thepriority);
-
-                    //Append task status to document
-                    const thetaskStatus = document.createElement("h2");
-                    thetaskStatus.textContent = task.taskStatus;
-                    taskDiv.appendChild(thetaskStatus);
-
-
-                    //Append complete task document to form and show on screen
-                    formContainerTwo.appendChild(task);
-                  }
-                } catch (error) {
-                  console.error("Error fetching task by ID:", error);
-                }
-              }
-              fetchTaskById(taskTwo.value);
-            });
-            */
+      //<p>Select a future date:</p>
+      //<input type="date" id="myDate" onfocus="disablePastDates()">
     </script>
   </body>
 </html>
-Shared in

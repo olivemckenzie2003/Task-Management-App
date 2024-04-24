@@ -31,44 +31,40 @@ const server = http.createServer((req, res) => {
   //Creating end point for when the front end want to get data from the back end
   //Check if the request coming from the fetch has the requested code "/tasks?id="
 
-  if (req.method === "GET" && req.url.includes("/tasks?id=")) {
-    //if it true it will read the file data.json file
-    fs.readFile(DATA_FILE_PATH, (err, data) => {
-      //if some call the task with id
-      //if it not available read the file data.json throw an error
+  if (req.method === "GET" && req.url.match(/\.css$/)) {
+    // Handle requests for CSS files
+    const filePath = path.join(__dirname, req.url); // Construct file path
+    fs.readFile(filePath, (err, data) => {
       if (err) {
-        console.error("Error reading data file:", err);
-        //500 internal server error. There is an issue with the server
-        res.writeHead(500, { "Content-Type": "text/plain" });
-        res.end("Internal Server Error");
-      } else {
-        //When File is found means data.json found from the backend
-        //Check the string of characters and if there is an equal sign
-        //it will spill the text before and after the array
-        // Check the request url .split means takes in a string and where it see equalto it will
-        //break the string into two. First bit before the equal sign will be text/string
-        //the second text in the array will be the text after the equals sign
-        //get the task ID coming from the front end
-        const query = req.url.split("=")[1];
-        //After retreive the id from the front end check inside task array (data.task)
-        //find method that loops through all the elements in an array.
-        //Check which element is equal to the ID of the query
-        //If true save the value in "singleData "
-        const singleData = JSON.parse(data.toString()).tasks.find(
-          //must be same value and sametype
-          (d) => d.taskID === Number(query)
-        );
-        //if find single data send it back to the front end
-        //send response codde that it is successful back to the front end
-        if (singleData) {
-          //resource when found successfully return the data to the front end
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify(singleData));
-        } else {
-          //when a resource is not found from the back end
+        if (err.code === "ENOENT") {
           res.writeHead(404, { "Content-Type": "text/plain" });
-          res.end("Task not found");
+          res.end("Not Found");
+        } else {
+          res.writeHead(500, { "Content-Type": "text/plain" });
+          res.end("Internal Server Error");
         }
+      } else {
+        res.writeHead(200, { "Content-Type": "text/css" });
+        res.end(data);
+      }
+    });
+  }
+
+  // Handle static file requests
+  else if (req.method === "GET" && req.url.match(/\.html$/)) {
+    const filePath = path.join(__dirname, req.url); // Construct file path
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        if (err.code === "ENOENT") {
+          res.writeHead(404, { "Content-Type": "text/plain" });
+          res.end("Not Found");
+        } else {
+          res.writeHead(500, { "Content-Type": "text/plain" });
+          res.end("Internal Server Error");
+        }
+      } else {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.end(data);
       }
     });
   }
@@ -130,8 +126,60 @@ const server = http.createServer((req, res) => {
         }
       });
     });
+  } else if (req.method === "PUT" && req.url.startsWith("/update")) {
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
+    req.on("end", () => {
+      try {
+        const updatedTask = JSON.parse(body);
+        console.log(updatedTask);
+        fs.readFile(DATA_FILE_PATH, (err, data) => {
+          if (err) {
+            console.error("Error reading data file:", err);
+            res.writeHead(500, { "Content-Type": "text/plain" });
+            res.end("Internal Server Error");
+          } else {
+            const tasks = JSON.parse(data).tasks;
+            const taskIndex = tasks.findIndex(
+              (task) => task.taskID === updatedTask.taskID
+            );
+            console.log(taskIndex);
+            if (taskIndex !== -1) {
+              tasks[taskIndex] = { ...tasks[taskIndex], ...updatedTask };
+              fs.writeFile(
+                DATA_FILE_PATH,
+                JSON.stringify({ tasks: tasks }),
+                (err) => {
+                  if (err) {
+                    console.error("Error writing to data file:", err);
+                    res.writeHead(500, { "Content-Type": "text/plain" });
+                    res.end("Internal Server Error");
+                  } else {
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                    res.end(
+                      JSON.stringify({
+                        message: "Task updated successfully.",
+                        task: tasks[taskIndex],
+                      })
+                    );
+                  }
+                }
+              );
+            } else {
+              res.writeHead(404, { "Content-Type": "text/plain" });
+              res.end("Task not found");
+            }
+          }
+        });
+      } catch (error) {
+        res.writeHead(400, { "Content-Type": "text/plain" });
+        res.end("Invalid JSON in request body");
+      }
+    });
   } else if (req.method === "DELETE" && req.url === "/delete") {
-    //Getting the data that is comig from the form which is the ID
+    //Getting the data that is coming from the form which is the ID
     let body = "";
     req.on("data", (chunk) => {
       body += chunk.toString();
@@ -152,13 +200,13 @@ const server = http.createServer((req, res) => {
         } else {
           //getting the task from the json file
           const tasks = JSON.parse(data).tasks;
-          console.log(tasks);
+          //console.log(tasks);
           //Updating the task and loop through the array
           //only return the task that has the ID
           const updatedTasks = tasks.filter(
             (task) => task.taskID !== Number(taskDelete.taskID)
           );
-          console.log("updated tasks", updatedTasks);
+          //console.log("updated tasks", updatedTasks);
           //Write the updated files without file deleted back to file.
           fs.writeFile(
             DATA_FILE_PATH,
@@ -173,7 +221,10 @@ const server = http.createServer((req, res) => {
                 console.log("Task deleted successfully.");
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(
-                  JSON.stringify({ message: "Task deleted successfully." })
+                  JSON.stringify({
+                    success: true,
+                    message: "Task deleted successfully.",
+                  })
                 );
               }
             }
@@ -197,61 +248,3 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-/*
-
-const fs = require("fs");
-
-const remove = (req, res) => {
-  const fileName = req.params.name;
-  const directoryPath = __basedir + "/resources/static/assets/uploads/";
-
-  fs.unlink(directoryPath + fileName, (err) => {
-    if (err) {
-      res.status(500).send({
-        message: "Could not delete the file. " + err,
-      });
-    }
-
-    res.status(200).send({
-      message: "File is deleted.",
-    });
-  });
-};
-
-const removeSync = (req, res) => {
-  const fileName = req.params.name;
-  const directoryPath = __basedir + "/resources/static/assets/uploads/";
-
-  try {
-    fs.unlinkSync(directoryPath + fileName);
-
-    res.status(200).send({
-      message: "File is deleted.",
-    });
-  } catch (err) {
-    res.status(500).send({
-      message: "Could not delete the file. " + err,
-    });
-  }
-};
-
-module.exports = {
-  remove,
-  removeSync,
-};
-
-
-
-const fs = require('fs');
-
-try {
-  fs.unlinkSync('file.txt');
-
-  console.log("Delete File successfully.");
-} catch (error) {
-  console.log(error);
-}
-
-
-*/
