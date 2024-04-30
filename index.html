@@ -44,6 +44,7 @@
       <form class=" " id="myFormThree">
         <br /><br />
         <h3>Update Task</h3>
+
         <!-- Hidden input for storing task ID -->
         <input type="hidden" id="taskID" name="taskID" required />
         <!-- Text input field -->
@@ -58,7 +59,6 @@
               placeholder="Enter date DD/MM/YYYY"
               required
               disabled
-              onfocus="disablePastDates()"
             /><br /><br />
           </div>
         </div>
@@ -69,10 +69,8 @@
             type="date"
             id="deadline"
             name="deadline"
-            placeholder="Enter
-          deadline DD/MM/YYYY"
+            placeholder="Enter deadline DD/MM/YYYY"
             required
-            onfocus="disablePastDates()"
           />
         </div>
         <br /><br />
@@ -301,6 +299,17 @@
               error
             );
           });
+      }
+
+      function getDate() {
+        var today = new Date();
+
+        document.getElementById("date").value =
+          today.getFullYear() +
+          "-" +
+          ("0" + (today.getMonth() + 1)).slice(-2) +
+          "-" +
+          ("0" + today.getDate()).slice(-2);
       }
 
       function disablePastDates() {

@@ -7,18 +7,14 @@
   <body>
     <a href="index.html" target="_self"><h2>Edit Task</h2></a>
     <header>
-      <div class="Center">
-        <nav>
-          <!-- <a href="index.html" target="_blank">Add A New Task</a>-->
-        </nav>
-      </div>
+      <div class="Center"></div>
     </header>
 
     <div class="form-container">
       <form class=" " id="myForm">
         <h1>Task Management App</h1>
         <br /><br />
-        <h3>Enter Task Details</h3>
+        <h3>Enter New Task Details</h3>
         <!-- Text input field -->
         <!--date task created-->
         <div>
@@ -29,6 +25,7 @@
               id="date"
               name="date"
               placeholder="Enter date DD/MM/YYYY"
+              min="<?php echo $today; ?>"
               required
             /><br /><br />
           </div>
